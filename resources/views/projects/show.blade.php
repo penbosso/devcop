@@ -73,15 +73,45 @@
                             <tr>
                                 <!-- Task Name -->
                                 <td class="table-text">
-                                    <div>{{ $task->name }}</div>
+                                   <a href="/tasks/{{$task->id}}"> <div>{{ $task->name }}</div></a>
                                 </td>
 
                                 <td>
-                                <form action="{{ route('tasks.destroy',[$task->id]) }}" method="POST">
+                                <form action="{{ route('tasks.destroy',[$task->id]) }}" method="POST" id="delete-task-form">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
 
-                                    <button class="btn btn-warning btn-sm">Delete Task</button><span> </span> <button class="btn btn-success btn-sm">Complete</button> <span class="pull-right"><i >{{$task->days}} Days</i> <i>{{$task->hours}} Hours</i></span>
+                                   <a href="#"  class="btn btn-sm btn-warning"
+                                    
+                                    onclick = "
+                                    var result = confirm('Are you sure you wish to delete this task?');
+                                        if(result){
+                                            event.preventDefault();
+                                            document.getElementById('delete-task-form').submit();
+                                        }
+                                    "><i class=" fas fa-minus-circle"></i> Delete Task</a>
+                                    <span> </span> 
+                                    <button class="btn btn-success btn-sm"
+                                     >
+                                        <i class=" fas fa-check-circle"></i> Complete    
+                                    </button> 
+
+                                        <form id="status-form" action="{{ route('tasks.update',[$task->id]) }}"
+                                                method="POST" style="display: none;">
+                                                <input type="hidden" name="_method" value="put" />
+                                                <input type="hidden" name="status" value="1" />
+                                                {{csrf_field()}}
+                                        </form>
+
+                                    <span class="pull-right">
+                                        <i >{{$task->days}} Days</i> <i>{{$task->hours}} Hours</i>
+                                        @if($task->status==0)
+                                            <b class="text-warning">not completed</b>
+                                        @endif
+                                        @if($task->status==1)
+                                            <b class="text-success">completed</b>
+                                        @endif
+                                    </span>
                                 </form>
                                 </td>
                             </tr>
@@ -91,7 +121,7 @@
             </div>
         </div>
     @endif
-
+    
       
       <!-- Example row of columns -->
       <div class="row" style="background: white; margin: 10px">

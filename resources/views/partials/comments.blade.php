@@ -27,10 +27,12 @@
                           <p>
                           {{ $comment->body}}
                           </p>
+                      @if (count( $comment->url ) > 0)
                         <i>Proof:</i>
                           <p class="text-primary">
                           {{ $comment->url}}
                           </p>
+                      @endif
                         </div>
                         </li>
                       @endforeach

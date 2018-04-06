@@ -2,18 +2,28 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row col-sm-9  col-md-9 col-lg-9 pull-left" style="background: white;">
-  <h1>Create new company</h1>
+<div class="row col-sm-8  col-md-8 col-lg-8  pull-left" style="background: white;">
+  <h1>Create new task</h1>
 
       <!-- Example row of columns -->
-      <div class="row col-sm-12 col-md-12 col-lg-12">
-        <form method="post" action="{{ route('companies.store') }}">
+      <div class="row col-sm-12 col-md-12 col-lg-12 panel panel-primary" >
+        <form method="post" action="{{ route('tasks.store') }}">
             {{csrf_field()}}
 
+
+             <div class="form-group">
+              <label for="project-content">Select Project</label>
+                <select name="project_id" class="form-control">
+                @foreach( $projects as $project)
+                  <option value="{{$project->id}}">{{ $project->name }}</option>
+                @endforeach
+              </select>
+            </div>
+
             <div class="form-group">
-                <label for="company-name">Name<span class="required">*</span></label>
-                <input placeholder="Enter name"
-                        id="company-name"
+                <label for="project-name">Task<span class="required">*</span></label>
+                <input placeholder="Enter task"
+                        id="task-name"
                         required
                         name="name"
                         spellcheck="false"
@@ -21,20 +31,20 @@
                         
                         />
             </div>
+          
 
-            <div clas="form-group">
-            <label for="company-content">Description</label>
-                <textarea placeholder="Enter description"
-                        style="resize: vertical"
-                        id="company-content"
-                        required
-                        name="description"
-                        rows="5"
-                        spellcheck="false"
-                        class="form-control autosize-target text-left"
-                        >
-                            
-                        </textarea>
+
+            <div class="form-group">
+            <label for="duration">Extimated duration</label>
+              <div class="duration col-md-4"  >
+              <input type="number" name="days" placeholder="Days" class="form-control">
+                  
+              </div>
+              <div class="duration col-md-4" >
+
+                  <input type="number" name="hours" placeholder="Hours" class="form-control">
+                  
+              </div>
             </div>
 
             <div class="form-group">
@@ -52,7 +62,7 @@
             <h4>Actions</h4>
             <ol class="list-unstyled">                                                                    
               
-              <li><a href="/companies">My companies</a></a></li>
+              <li><a href="/tasks">All tasks</a></a></li>
             </ol>
           </div>
             </ol>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Task;
 use App\Project;
+use App\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class TasksController extends Controller
@@ -18,6 +19,12 @@ class TasksController extends Controller
         //
         if(Auth::check()){
             $tasks = Task::where('user_id',Auth::user()->id)->get();
+
+            // foreach ($tasks as $task){
+            //     $taskproject = Project::find($task->project_id);
+            // }
+            // dd($taskproject);
+
             return view('tasks.index',['tasks'=>$tasks]);
         }
         return view('Auth.login');
@@ -31,6 +38,11 @@ class TasksController extends Controller
     public function create()
     {
         //
+       
+        // $companies = Company::where('user_id', Auth::user()->id)->get();
+        $projects = Project::where('user_id', Auth::user()->id)->get();
+       
+        return view('tasks.create',['projects'=>$projects]);
     }
 
     /**
@@ -54,7 +66,7 @@ class TasksController extends Controller
             
 
             if($task){
-                return redirect()->route('projects.show',['tasks'=>$task])
+                return redirect()->route('tasks.show',['tasks'=>$task])
                 ->with('success','task created suscessfully');
             }
         }
@@ -71,6 +83,12 @@ class TasksController extends Controller
     public function show(Task $task)
     {
         //
+        $task = Task::find($task->id);
+        $comments = $task->comments;
+        $project = Project::find($task->project_id);
+        $company = Company::find($project->company_id);
+        // dd($tasks);
+        return view('tasks.show',['project'=>$project, 'comments'=>$comments,'company'=>$company, 'task'=>$task]);
     }
 
     /**
@@ -94,6 +112,20 @@ class TasksController extends Controller
     public function update(Request $request, Task $task)
     {
         //
+        // dd($task);
+
+        $project_id =$task->project_id;
+        $taskUpdate = Task::where('id',$task->id)
+                                ->update([
+                                    'status'=> $request->input('status')
+                                    ]);
+                                    // dd($taskUpdate);
+        if($taskUpdate){
+            return redirect()->route('projects.show',['project'=>$project_id])
+                ->with('success', 'task completed');
+        }
+        //redirect
+        return back()->withImput();
     }
 
     /**

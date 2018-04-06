@@ -2,11 +2,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row col-sm-9  col-md-9 col-lg-9 pull-left" style="background: white;">
+<div class="row col-sm-8  col-md-8 col-lg-8 pull-left" style="background: white;">
   <h1>Create new project</h1>
 
       <!-- Example row of columns -->
-      <div class="row col-sm-12 col-md-12 col-lg-12">
+      <div class="row col-sm-12 col-md-12 col-lg-12 panel panel-primary">
         <form method="post" action="{{ route('projects.store') }}">
             {{csrf_field()}}
 

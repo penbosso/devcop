@@ -3,25 +3,104 @@
 
 @section('content')
 <div class="col-sm-9  col-md-9 col-lg-9 pull-left">
+
     <!-- Jumbotron -->
       <div class="jumbotron">
-        <h1>{{ $company->name}}</h1>
-        <p class="lead">{{$company->description}}</p>
+        
+        <p class="lead">
+          <b>Company : </b>{{ $company->name}}
+          <br/>
+          <b>Project : </b>{{$project->name}}
+        </p>
+        <h2 class="text-primary"><b class="small">Task : </b>{{ $task->name}}</h2>
+        <p class="lead">
+          <b>Estimated time :</b> <i >{{$task->days}} Days</i> <i>{{$task->hours}} Hours</i>
+          <br/>
+          <b>Status : </b>
+          @if($task->status==0)
+              <b class="text-warning">not completed</b>
+          @endif
+          @if($task->status==1)
+              <b class="text-success">completed</b>
+          @endif
+      </p>
         <!-- <p><a class="btn btn-lg btn-success" role="button" href="#">Get started today</a></p> -->
-      </div>
+        <form action="{{ route('tasks.destroy',[$task->id]) }}" method="POST" id="delete-task-form">
+          {{ csrf_field() }}
+          {{ method_field('DELETE') }}
 
-      <!-- Example row of columns -->
-      <div class="row" style="background: white; margin: 10px">
-      <a href="/projects/create/{{$company->id}}" class="pull-right btn btn-default btn-sm">Add Project</a>
-      @foreach($company->projects as $project)
-        <div class="col-lg-4">
-          <h2>{{ $project->name}}</h2>
-          <p class="text-danger">{{ $project->description}}</p>
-          <p><a class="btn btn-primary" role="button" href="/projects/{{ $project->id }}">Add comment »</a></p>
-        </div>
-       @endforeach
+          <a href="#"  class="btn btn-sm btn-warning"
+          
+          onclick = "
+          var result = confirm('Are you sure you wish to delete this task?');
+              if(result){
+                  event.preventDefault();
+                  document.getElementById('delete-task-form').submit();
+              }
+          "><i class=" fas fa-minus-circle"></i> Delete Task</a>
+          <span> </span> 
+          <button class="btn btn-success btn-sm"
+            >
+              <i class=" fas fa-check-circle"></i> Complete    
+          </button> 
+
+          <form id="status-form" action="{{ route('tasks.update',[$task->id]) }}"
+                  method="POST" style="display: none;">
+                  <input type="hidden" name="_method" value="put" />
+                  <input type="hidden" name="status" value="1" />
+                  {{csrf_field()}}
+          </form>
       </div>
-</div>
+      
+      <div class="row container-fluid">
+
+
+      @include('partials.comments')
+      
+      <button data-toggle="collapse" data-target="#commentdiv" class="btn btn-info btn-sm pull-right">Comment</button> 
+        <div id="commentdiv" class="collapse" >
+          <form method="post" action="{{ route('comments.store') }}">
+              {{csrf_field()}}
+
+              <input type="hidden" name="commentable_type" value="App\task">
+              <input type="hidden" name="commentable_id" value="{{ $task->id }}">
+
+                <div clas="form-group">
+                  <label for="comment-content"><i class="fas fa-comment-dots"></i> comment</label>
+                      <textarea placeholder="Enter comment"
+                            style="resize: vertical"
+                            id="comment-content"
+                            required
+                            name="body"
+                            rows="3"
+                            spellcheck="false"
+                            class="form-control autosize-target text-left"
+                            >
+                                
+                            </textarea>
+                </div>
+              <div class="form-group">
+                <label for="comment-content">Enter proof of work done (url/photo)</label>
+                    <textarea placeholder="Enter proof url or photo)"
+                            style="resize: vertical"
+                            id="comment-content"
+                            name="url"
+                            rows="2"
+                            spellcheck="false"
+                            class="form-control autosize-target text-left"
+                            >
+                                
+                            </textarea>
+              </div>
+
+              <div class="form-group">
+                <input type="submit" class="btn btn-sm btn-primary pull-right" value=" submit " /> <i class="fas fa-comment-dots pull-right"></i>
+              </div>
+          </form>
+        </div>
+  </div>
+        <!-- <a href="/projects/create" class="pull-right btn btn-default btn-sm">Add Project</a> -->
+               
 <div class="col-sm-3 col-md-3 col-lg-3 blog-sidebar">
           <!-- <div class="sidebar-module sidebar-module-inset">
             <h4>About</h4>
@@ -58,10 +137,11 @@
           <div class="sidebar-module">
             <h4>Members</h4>
             <ol class="list-unstyled">
-              <li><a href="#">March 2014</a></li>
+              <li><a href="#">Chris</a></li>
              
             </ol>
           </div>
           
-        </div>
+</div>
+
  @endsection

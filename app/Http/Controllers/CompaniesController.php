@@ -104,7 +104,7 @@ class CompaniesController extends Controller
                                     'description'=> $request->input('description')
                                     ]);
         if($companyUpdate){
-            return redirect()->route('companies.show',['comany'=>$company->id])
+            return redirect()->route('companies.show',['company'=>$company->id])
                 ->with('success', 'Company updated successfully');
         }
         //redirect
