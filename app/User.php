@@ -22,7 +22,7 @@ class User extends Authenticatable
         'middle_name',
         'last_name',
         'city',
-        'role'
+        'temp_role'
     ];
 
     /**
@@ -35,9 +35,7 @@ class User extends Authenticatable
     ];
 
    
-    public function roles(){
-        return $this->belongsTo('App\Role');
-    }
+
     public function companies(){
         return $this->hasMany('App\Company');
     }
@@ -50,5 +48,8 @@ class User extends Authenticatable
     public function comments()
     {
         return $this->morphMany('App\comment','commentable');
+    }
+    public function roles(){
+        return $this->hasMany('App\Role');
     }
 }

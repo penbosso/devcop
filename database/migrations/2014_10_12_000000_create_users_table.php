@@ -23,7 +23,6 @@ class CreateUsersTable extends Migration
                 $table->string('middle_name')->nullable();
                 $table->string('last_name')->nullable();
                 $table->string('city')->nullable();
-                $table->integer('role')->nullable()->default(3);
                 $table->rememberToken();
                 $table->timestamps();
             });
@@ -34,7 +33,7 @@ class CreateUsersTable extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('city')->nullable();
-            $table->integer('role')->nullable()->default(3);
+            $table->integer('temp_role')->nullable()->default(3);
         });
     }
 

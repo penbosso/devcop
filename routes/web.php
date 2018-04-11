@@ -24,6 +24,7 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('companies','CompaniesController');
     Route::get('projects/create/{company_id?}','ProjectsController@create');
     Route::post('projects/adduser','ProjectsController@adduser')->name('projects.adduser');
+    Route::post('companies/join','CompaniesController@join')->name('companies.join');
     Route::resource('comments','CommentsController');
     Route::resource('projects','ProjectsController');
     Route::resource('roles','RolesController');

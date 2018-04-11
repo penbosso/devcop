@@ -51,8 +51,8 @@
                         <li><a href="{{ route('projects.index') }}"><i class="fas fa-clipboard-list"></i> Projects</a></li>
                         <li><a href="{{ route('tasks.index') }}"><i class="fas fa-tasks"></i> Tasks</a></li>
                         
-                        @if(Auth::user()->role == 1)
-                        <li class="dropdown">
+            {{--            @if(Auth::user()->temp_role == 1)
+                            <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 <i class="fas fa-address-card"></i> Admin<span class="caret"></span>
                                 </a>
@@ -66,7 +66,7 @@
                                 </ul>
                             </li>
                         @endif
-                        
+            --}}
                         <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 <i class="fas fa-user-circle"></i> {{ Auth::user()->name }} <span class="caret"></span>

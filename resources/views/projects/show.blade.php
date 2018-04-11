@@ -80,7 +80,7 @@
                                 <form action="{{ route('tasks.destroy',[$task->id]) }}" method="POST" id="delete-task-form">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-
+                                    @if($role = 1)
                                    <a href="#"  class="btn btn-sm btn-warning"
                                     
                                     onclick = "
@@ -90,12 +90,14 @@
                                             document.getElementById('delete-task-form').submit();
                                         }
                                     "><i class=" fas fa-minus-circle"></i> Delete Task</a>
-                                    <span> </span> 
+                                    @endif
+                                    <span> </span>
+                                    @if($role < 3) 
                                     <button class="btn btn-success btn-sm"
                                      >
                                         <i class=" fas fa-check-circle"></i> Complete    
                                     </button> 
-
+                                    @endif
                                         <form id="status-form" action="{{ route('tasks.update',[$task->id]) }}"
                                                 method="POST" style="display: none;">
                                                 <input type="hidden" name="_method" value="put" />
@@ -183,15 +185,24 @@
             <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
           </div> -->
           <div class="sidebar-module">
+          @if($role == 1)
+          <h3 class="text-info">Admin</h3>
+          @endif
+          @if($role == 2)
+          <h3 class="text-info">Manager</h3>
+          @endif
             <h4>Actions</h4>
             <ol class="list-unstyled">
-              <li><a href="/projects/{{$project->id}}/edit"><i class="fas fa-edit"></i> Edit</a></li>
+            @if($role < 3)
+              <li><a class="text-warning" href="/projects/{{$project->id}}/edit"><i class="fas fa-edit"></i> Edit</a></li>
+            @endif
               <li><a href="/projects/create"><i class="fas fa-plus-circle"></i> Create new project</a></li>
               <li><a href="/projects"><i class="fas fa-list"></i> List Projects</a></li>
               
               <br/>
 
-              @if($project->user_id == Auth::user()->id)
+              @if($project->user_id == Auth::user()->id ||$role == 1)
+            
               <li><a href="#" class ="text-warning"
               
                 onclick = "

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Project;
 use App\Company;
 use App\User;
+use App\Role;
 use App\ProjectUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,8 +21,27 @@ class ProjectsController extends Controller
     {
         //
         if(Auth::check()){
+            // creater
             $projects = Project::where('user_id',Auth::user()->id)->get();
-            return view('projects.index',['projects'=>$projects]);
+
+             //  administrator
+            $company_id = Role::select('company_id')->where('user_id',Auth::user()->id)
+                              ->where('name','admin')->get();
+            $admins = Project::whereIn('company_id',$company_id)->get();
+
+            // manager
+            $company_id = Role::select('company_id')->where('user_id',Auth::user()->id)
+                              ->where('name','manager')->get();
+            $managers = Project::whereIn('company_id',$company_id)->get();
+
+            // memeber
+            $company_id = Role::select('company_id')->where('user_id',Auth::user()->id)
+                              ->where('name','member')->get();
+            $members = Project::whereIn('company_id',$company_id)->get();
+
+            return view('projects.index',['admins'=>$admins,'managers'=>$managers, 'members'=>$members]);
+
+            // return view('projects.index',['projects'=>$projects]);
         }
         return view('Auth.login');
         
@@ -77,11 +97,34 @@ class ProjectsController extends Controller
     public function show(Project $project)
     {
         //
-        $project = Project::find($project->id);
-        $comments = $project->comments;
-        $tasks = $project->tasks;
+                // set temportary role for user table
+        $user_id = Auth::user()->id;
+        $company_id = $project->company_id;
+        $role_name = Role::select('name')->where('user_id',$user_id)->where('company_id',$company_id)->first();
+        $role_name = $role_name->name;
+
+        if($role_name =='admin'){
+           $role = 1;
+
+        }
+        elseif($role_name =='manager'){
+            $role =2;
+        }
+        else{
+            $role = 3;
+        }
+
+
+        if($role){    
+            $project = Project::find($project->id);
+            $comments = $project->comments;
+            $tasks = $project->tasks;
+            return view('projects.show',['project'=>$project, 'comments'=>$comments,'tasks'=>$tasks,'role'=>$role]);
+        }
+        else{
+            dd('setting role failed');
+        }
         // dd($tasks);
-        return view('projects.show',['project'=>$project, 'comments'=>$comments,'tasks'=>$tasks]);
     }
 
     /**
@@ -119,7 +162,8 @@ class ProjectsController extends Controller
         //redirect
         return back()->withImput();
     }
-    public function adduser(Request $request){
+    public function adduser(Request $request)
+    {
         // takes a project and add a user to it
         $project = Project::find($request->input('project_id'));
 

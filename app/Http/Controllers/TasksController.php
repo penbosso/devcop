@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Task;
 use App\Project;
 use App\Company;
+use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class TasksController extends Controller
@@ -82,13 +83,43 @@ class TasksController extends Controller
      */
     public function show(Task $task)
     {
-        //
         $task = Task::find($task->id);
         $comments = $task->comments;
         $project = Project::find($task->project_id);
         $company = Company::find($project->company_id);
+        
+       // set temportary role for user table
+        $user_id = Auth::user()->id;
+        $company_id = $company->id;
+        $role_name = Role::select('name')->where('user_id',$user_id)->where('company_id',$company_id)->first();
+        $role_name = $role_name->name;
+
+        if($role_name =='admin'){
+           $role = 1;
+
+        }
+        elseif($role_name =='manager'){
+            $role =2;
+        }
+        else{
+            $role = 3;
+        }
+
+
+        if($role){    
+            $project = Project::find($project->id);
+            $comments = $project->comments;
+            $tasks = $project->tasks;
+            
+            return view('tasks.show',['project'=>$project, 'comments'=>$comments,'company'=>$company, 'task'=>$task, 'role'=>$role]);
+        }
+        else{
+            dd('setting role failed');
+        }
+
+        
         // dd($tasks);
-        return view('tasks.show',['project'=>$project, 'comments'=>$comments,'company'=>$company, 'task'=>$task]);
+        
     }
 
     /**

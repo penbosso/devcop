@@ -9,18 +9,7 @@
       <div class="row col-sm-12 col-md-12 col-lg-12 panel panel-primary">
         <form method="post" action="{{ route('companies.store') }}">
             {{csrf_field()}}
-            <div class="form-group">
-                <label for="company-code">Company code<span class="required">*</span></label>
-                <input placeholder="Enter company code"
-                        id="company-code"
-                        required
-                        name="code"
-                        spellcheck="false"
-                        class="form-control"
-                        
-                        />
-            </div>
-            
+
             <div class="form-group">
                 <label for="company-name">Name<span class="required">*</span></label>
                 <input placeholder="Enter name"

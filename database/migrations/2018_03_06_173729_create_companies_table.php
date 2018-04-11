@@ -19,6 +19,7 @@ class CreateCompaniesTable extends Migration
             $table->longText('description');
             $table->string('name');
             $table->integer('user_id')->unsigned();
+            $table->string('code');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps('created_at');
         });

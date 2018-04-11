@@ -9,7 +9,8 @@ class Company extends Model
     protected $fillable = [
         'name',
         'description',
-        'user_id'
+        'user_id',
+        'code'
     ];
 
     public function users(){
@@ -21,6 +22,9 @@ class Company extends Model
     public function comments()
     {
         return $this->morphMany('App\comment','commentable');
+    }
+    public function roles(){
+        return $this->hasMany('App\Role');
     }
     
 }

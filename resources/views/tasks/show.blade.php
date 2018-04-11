@@ -107,13 +107,22 @@
             <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
           </div> -->
           <div class="sidebar-module">
+          @if($role == 1)
+          <h3 class="text-info">Admin</h3>
+          @endif
+          @if($role == 2)
+          <h3 class="text-info">Manager</h3>
+          @endif
             <h4>Actions</h4>
             <ol class="list-unstyled">
+            @if($role < 3)
               <li><a href="/companies/{{$company->id}}/edit"><i class="fas fa-edit"></i> Edit</a></li>
+            @endif
               <li><a href="/projects/create/{{$company->id}}"><i class="fas fa-plus-circle"></i> Add Project</a></li>
               <li><a href="/companies"><i class="fas fa-building"></i> My companies</a></li>
               <li><a href="/companies/create"><i class="fas fa-plus-circle"></i> Create new Company</a></li>
               <br/>
+              @if($role < 3)
               <li><a href="#"
               
                 onclick = "
@@ -131,6 +140,7 @@
               </form>
 
               </li>
+              @endif
               
             </ol>
           </div>

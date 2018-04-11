@@ -8,8 +8,14 @@
         <div class="panel-body">
         
         <ul class="lsist-group">
-        @foreach($projects as $project)
-            <li class="list-group-item"><a href="/projects/{{$project->id}}">{{$project->name}}</a></li>
+        @foreach($admins as $project)
+            <li class="list-group-item"><a href="/projects/{{$project->id}}">{{$project->name}} </a> <em class="pull-right text-success">Admin</em></li>
+        @endforeach
+        @foreach($managers as $project)
+            <li class="list-group-item"><a href="/projects/{{$project->id}}">{{$project->name}} </a> <em class="pull-right text-info">Manager</em></li>
+        @endforeach
+        @foreach($members as $project)
+            <li class="list-group-item"><a href="/projects/{{$project->id}}">{{$project->name}} </a></li>
         @endforeach
         </ul>
         </div>
